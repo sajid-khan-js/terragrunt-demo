@@ -8,10 +8,18 @@
 these issues", you're right, it would, but what solves the issues with your
 buggy script, especially as it gets more complex as you scale?
 [Terragrunt](https://github.com/gruntwork-io/terragrunt) has come across, and
-solved issues your script is yet to encouter. The same reason you use terraform
+solved issues your script is yet to encounter. The same reason you use terraform
 in most cases to interact with cloud vendor APIs, is the same reason you should
 use a well established tool (6+ years) to scale terraform deployments. Simply
 put, if you find yourself in this problem space, why re-invent the wheel?
+
+## Guide
+
+```sh
+# cd into a deployment e.g. cd dev/vpc
+terraform init -backend-config=backend.tfvars
+terraform plan
+```
 
 ## Symlinks
 
@@ -33,20 +41,29 @@ Symlinks are a bit crude, but get you a long way into keeping things DRY with
   places (`backend.tfvars` and `terraform.tfvars`), and there's still necessary
   boilerplate for each deployment (e.g. `outputs.tf`). You could go super
   aggressive with symlinks and centralise other things e.g. the provider block,
-  outputs.tf. Although we want environments to be uniform (à la the 12 Factor
-  App), I think it's prudent to have some flexibility available in each
+  outputs.tf. However, we do want environments to be uniform (à la the 12 Factor
+  App), but I think it's prudent to have some flexibility available in each
   environment, otherwise, you might be nudging people towards manual changes in
   the console when experimenting, because your infra as code setup is too
   restrictive
 
 ## State
 
-- Even with the partial state configuration, you still need to remember to
-  update the "key" (i.e. the path to your statefile in your bucket). What
-  happens if you copy and paste the VPC config to your EKS folder (to use it as
-  a starting point), but forget to update that key, thus overwriting your VPC
-  statefile? `terraform import` will help you salvage that situation, but any
-  workflow/process that relies on a human to remember things is doomed.
+Even with the partial state configuration, you still need to remember to update
+the "key" (i.e. the path to your statefile in your bucket). What happens if you
+copy and paste the VPC terraform config to your EKS folder (to use it as a
+starting point), but forget to update that key, thus overwriting your VPC
+statefile? `terraform import` or having versioning enabled on your bucket will
+help you salvage that situation, but any workflow/process that relies on a human
+to remember things is doomed.
+
+## Provider
+
+Since my AWS provider config was simple (just need to specify the region) I've
+just baked it into every file. But what if I had a more complex structure? You
+could bake something into your modules and pass in variables, but that makes
+your modules less flexible i.e. they might work for you team's workflow but
+another team might struggle to consume them.
 
 ## Dependencies
 
@@ -64,7 +81,8 @@ Another issue is that you must remember to complete the EKS modules inputs after
 you've deployed the VPC i.e. you need the VPC ID and subnet IDs. This is a
 suboptimal workflow, it nudges people towards running terraform locally rather
 than through a pipeline (and thus a pull-request process), and is brittle: what
-if you key in the public subnet IDs by mistake when creating your EKS cluster?
+if you key in the public subnet IDs (as opposed to your private subnet IDs) by
+mistake when creating your EKS cluster?
 
 ## References
 
