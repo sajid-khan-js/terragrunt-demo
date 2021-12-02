@@ -1,6 +1,6 @@
 # Since we are interpolating some of these values into map variables for this
 # particular module, we need to grab a local copy of the values in env.hcl. You
-# don't need todo this if values in your env.hcl or root terragrunt.hcl match
+# don't need to do this if values in your env.hcl or root terragrunt.hcl match
 # the module's variable name and type
 locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))

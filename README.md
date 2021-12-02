@@ -16,7 +16,7 @@ Essentially,
 
 You are still running terraform in the background, so you still write normal
 terraform, but when you usually execute your terraform (i.e. when you run
-terraform plan/apply), you now use terragrunt todo that for you instead.
+terraform plan/apply), you now use terragrunt to do that for you instead.
 
 More info [here](https://terragrunt.gruntwork.io)
 
@@ -60,7 +60,7 @@ I've seen, and created myself, plenty of vanilla terraform code structures that
 at the very least were a pain to work with, or where you could cause chaos in
 prd because you forget to switch context.
 
-Imagine you had to remember todo steps A, B, C before running `terraform plan`
+Imagine you had to remember to do steps A, B, C before running `terraform plan`
 in dev, and then steps X, Y, Z before running `terraform plan` in prd. That
 get's annoying but also can be catastrophic, for example I get myself setup for
 prd, get distracted, think I'm actually setup for dev, and cause chaos in prd
