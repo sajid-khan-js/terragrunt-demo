@@ -8,7 +8,7 @@
 
 Terragrunt is a thin wrapper around terraform that…blah…blah...
 
-Essentially,
+Essentially:
 
 `terragrunt plan > *magic happens* > runs terraform plan for you`
 
@@ -43,12 +43,16 @@ Take a look at the below directory structure:
 Wouldn't it be great when you were in `dev/vpc` and ran an infra command it
 would just figure stuff out like what environment it was in and act accordingly?
 
-Keeping this in mind: `root terragrunt.hcl > dev/env.hcl > vpc/terragrunt.hcl`:
-When you run `terragrunt plan` in `dev/vpc`, which executes the config in
-`dev/vpc/terragrunt.hcl`, it inherits what came before it i.e. `env.hcl`, and
-the root `terragrunt.hcl`. It can also make decisions based on that context,
-e.g. for dev my state bucket is X, my AWS role to assume is Y, and my deployment
-config for that module is Z
+Keeping this hierarchy in mind: `root terragrunt.hcl > dev/env.hcl >
+vpc/terragrunt.hcl`:
+
+- When you run `terragrunt plan` in `dev/vpc`, it executes the config in
+    `dev/vpc/terragrunt.hcl`.
+- It inherits any config that came above it in the hierarchy i.e. `env.hcl`, and
+    the root `terragrunt.hcl`.
+- It can also make decisions based on that context, e.g. for dev my state bucket
+    is X, my AWS role to assume is Y, and my deployment config for that module
+    is Z.
 
 For me that's terragrunt's biggest feature, it allows you to create intuitive
 infrastructure code structures that just work. Imagine telling a junior engineer
@@ -80,9 +84,10 @@ increased productivity when working across environments, but also safety.
 - [the-magic](./the-magic) - What does terragrunt actually do when you run
   `terragunt plan/apply`? Find out here.
 
-In the above examples, I am trying to deploy a VPC and an EKS cluster to multiple
-environments (dev and prd), I'm using these respective community terraform
-modules [1](https://github.com/terraform-aws-modules/terraform-aws-vpc),
+In the above examples, I am trying to deploy a VPC and an EKS cluster to
+multiple environments (dev and prd), I'm using these respective community
+terraform modules
+[1](https://github.com/terraform-aws-modules/terraform-aws-vpc),
 [2](https://github.com/terraform-aws-modules/terraform-aws-eks).
 
 :warning: Although I'm familiar with these modules, I've not actually run any of
